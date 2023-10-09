@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Fresh Meat",
+        "image": "img/product/product-1.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Bananas",
+        "image": "img/product/product-2.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Guava",
+        "image": "img/product/product-3.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Grapes",
+        "image": "img/product/product-4.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Burger",
+        "image": "img/product/product-5.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Mango",
+        "image": "img/product/product-6.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Watermelon",
+        "image": "img/product/product-7.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Apples",
+        "image": "img/product/product-8.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Prunes",
+        "image": "img/product/product-9.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Chicken",
+        "image": "img/product/product-10.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Juice",
+        "image": "img/product/product-11.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Fruits",
+        "image": "img/product/product-12.jpg",
+        "price": "$30.00"
+    }
+]

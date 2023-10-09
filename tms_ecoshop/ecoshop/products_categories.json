@@ -1,0 +1,111 @@
+[
+  {
+    "id": 1,
+    "name": "Bakery",
+    "url": "bakery",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Cupboard",
+    "url": "cupboard",
+    "image": "img/categories/cat-2.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Fresh & Chilled",
+    "url": "fresh-and-chilled",
+    "image": "img/categories/cat-3.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Cheese",
+    "url": "cheese",
+    "image": "img/categories/cat-4.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Cured Meats & Charcuterie",
+    "url": "cured-meats-and-charcuterie",
+    "image": "img/categories/cat-5.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Health Foods",
+    "url": "health-foods",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Health Drinks",
+    "url": "health-drinks",
+    "image": "img/categories/cat-2.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Chocolate & Treats",
+    "url": "chocolate-treats",
+    "image": "img/categories/cat-3.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Drinks",
+    "url": "drinks",
+    "image": "img/categories/cat-4.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Soft Drinks",
+    "url": "soft-drinks",
+    "image": "img/categories/cat-5.jpg"
+  },
+  {
+    "id": 11,
+    "name": "Tea",
+    "url": "tea",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 12,
+    "name": "Coffee",
+    "url": "coffee",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 13,
+    "name": "Gifts & Hampers",
+    "url": "gifts-and-hampers",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 14,
+    "name": "Home & Kitchen",
+    "url": "home-and-kitchen",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 15,
+    "name": "Personal Care & Beauty",
+    "url": "personal-care-beauty",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 16,
+    "name": "Christmas",
+    "url": "christmas",
+    "image": "img/categories/cat-1.jpg"
+  },
+  {
+    "id": 17,
+    "name": "Easter",
+    "url": "easter",
+    "image": "img/categories/cat-1.jpg"
+  }
+]
+
+
+
+
+
+
+

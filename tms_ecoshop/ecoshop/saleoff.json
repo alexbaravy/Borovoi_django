@@ -1,0 +1,44 @@
+[
+ {
+        "name": "Raisin'n'nuts",
+        "image": "img/product/discount/pd-1.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    },
+    {
+        "name": "Vegetables'package",
+        "image": "img/product/discount/pd-2.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    },
+    {
+        "name": "Mixed Fruitss",
+        "image": "img/product/discount/pd-3.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    },
+    {
+        "name": "Raisin'n'nuts",
+        "image": "img/product/discount/pd-4.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    },
+    {
+        "name": "Raisin'n'nuts",
+        "image": "img/product/discount/pd-5.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    },
+    {
+        "name": "Raisin'n'nuts",
+        "image": "img/product/discount/pd-6.jpg",
+        "percent_discount": "-20%",
+        "price_old": "$30.00",
+        "price_new": "$36.00"
+    }
+  ]

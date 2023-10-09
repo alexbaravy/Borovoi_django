@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Salad",
+        "image": "img/latest-product/lp-1.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Pepper",
+        "image": "img/latest-product/lp-2.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Chicken",
+        "image": "img/latest-product/lp-3.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Salad",
+        "image": "img/latest-product/lp-1.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Pepper",
+        "image": "img/latest-product/lp-2.jpg",
+        "price": "$30.00"
+    },
+    {
+        "name": "Chicken",
+        "image": "img/latest-product/lp-3.jpg",
+        "price": "$30.00"
+    }
+]

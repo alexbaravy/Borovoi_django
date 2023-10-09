@@ -1,0 +1,18 @@
+{% load static %}
+<!-- Categories Section Begin -->
+    <section class="categories">
+        <div class="container">
+            <div class="row">
+                <div class="categories__slider owl-carousel">
+                    {% for item in products_categories %}
+                    <div class="col-lg-3">
+                        <div class="categories__item set-bg" data-setbg="{% static item.image %}">
+                            <h5><a href="{% url 'ecoshop:shop_grid' item.url %}">{{ item.name }}</a></h5>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Categories Section End -->

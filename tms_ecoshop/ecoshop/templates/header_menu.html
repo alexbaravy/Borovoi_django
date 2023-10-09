@@ -1,0 +1,16 @@
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="{% url 'ecoshop:index' %}">Home</a></li>
+                            <li><a href="{% url 'ecoshop:shop_grid' %}">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="header__menu__dropdown">
+                                    <li><a href="{% url 'ecoshop:shop_details' %}">Shop Details</a></li>
+                                    <li><a href="{% url 'ecoshop:shoping_cart' %}">Shoping Cart</a></li>
+                                    <li><a href="{% url 'ecoshop:checkout' %}">Check Out</a></li>
+                                    <li><a href="{% url 'ecoshop:blog_details' %}">Blog Details</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'ecoshop:blog' %}">Blog</a></li>
+                            <li><a href="{% url 'ecoshop:contact' %}">Contact</a></li>
+                        </ul>
+                    </nav>

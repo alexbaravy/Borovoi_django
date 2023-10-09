@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Fresh Meat",
+    "image": "img/featured/feature-1.jpg",
+    "categories": "mix oranges fresh-meat",
+    "price": "$30.00"
+  },
+  {
+    "name": "Bananas",
+    "image": "img/featured/feature-2.jpg",
+    "categories": "mix vegetables fastfood",
+    "price": "$30.00"
+  },
+  {
+    "name": "Guava",
+    "image": "img/featured/feature-3.jpg",
+    "categories": "vegetables fresh-meat",
+    "price": "$30.00"
+  },
+  {
+    "name": "Watermelon",
+    "image": "img/featured/feature-4.jpg",
+    "categories": "mix fastfood oranges",
+    "price": "$30.00"
+  },
+  {
+    "name": "Grapes",
+    "image": "img/featured/feature-5.jpg",
+    "categories": "mix fresh-meat vegetables",
+    "price": "$30.00"
+  },
+  {
+    "name": "Burger",
+    "image": "img/featured/feature-6.jpg",
+    "categories": "mix oranges fastfood",
+    "price": "$30.00"
+  },
+  {
+    "name": "Mango",
+    "image": "img/featured/feature-7.jpg",
+    "categories": "mix fresh-meat vegetables",
+    "price": "$30.00"
+  },
+  {
+    "name": "Apple",
+    "image": "img/featured/feature-8.jpg",
+    "categories": "mix fastfood vegetables",
+    "price": "$30.00"
+  }
+]

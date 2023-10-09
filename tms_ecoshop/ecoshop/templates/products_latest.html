@@ -1,0 +1,32 @@
+{% load static %}
+                            <div class="latest-product__text">
+                                <h4>Latest Products</h4>
+                                <div class="latest-product__slider owl-carousel">
+                                    <div class="latest-prdouct__slider__item">
+                                        {% for item in products_latest|slice:":3" %}
+                                        <a href="#" class="latest-product__item">
+                                            <div class="latest-product__item__pic">
+                                                <img src="{% static item.image %}" alt="">
+                                            </div>
+                                            <div class="latest-product__item__text">
+                                                <h6>{{ item.name }}</h6>
+                                                <span>{{ item.price }}</span>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="latest-prdouct__slider__item">
+                                        {% for item in products_latest|slice:"3:" %}
+                                        <a href="#" class="latest-product__item">
+                                            <div class="latest-product__item__pic">
+                                                <img src="{% static item.image %}" alt="">
+                                            </div>
+                                            <div class="latest-product__item__text">
+                                                <h6>{{ item.name }}</h6>
+                                                <span>{{ item.price }}</span>
+                                            </div>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
