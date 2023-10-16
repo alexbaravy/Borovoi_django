@@ -22,4 +22,6 @@ urlpatterns = [
     path("blog/blog-details/", views.blog_details, name="blog_details"),
     # http://127.0.0.1:8000/ecoshop/contact/
     path("contact/", views.contact, name="contact"),
+    # http://127.0.0.1:8000/ecoshop/contact/
+    path("tasks-3/", views.tasks_3, name="tasks_3"),
 ]

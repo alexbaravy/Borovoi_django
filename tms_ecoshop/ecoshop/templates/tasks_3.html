@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>4)	Вывести всех поставщиков</h2>
+
+<ul>
+{% for item in vendors|slice:":10"  %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>5)	Вывести все продукты кроме мясных!</h2>
+<ul>
+{% for item in products_non_meat|slice:":10" %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+
+<h2>6)	Вывести поставщиков которые уже работают более 20 лет.</h2>
+<ul>
+{% for item in vendors_gt_20 %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>7)	Вывести всех поставщиков название которых начинается на “Pana” и основаны не более 10 лет назад</h2>
+<ul>
+{% for item in vendors_lt_10 %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>8)	Вывести первых 5 самых молодых компаний поставщиков.</h2>
+<ul>
+{% for item in vendors_young %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>9)	Вывести все товары со стоимостью более 15р или количеством менее 150 ед..</h2>
+<ul>
+{% for item in products_cost_amount %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>10)	Вывести все товары у которых не дефолтное описание</h2>
+<ul>
+{% for item in products_desc_non_def %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>11)	Изменить дату привоза на текущую дату.</h2>
+<ul>
+{% for item in update_date %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}
