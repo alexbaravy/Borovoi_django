@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.urls import reverse
 import json
 import os
-from ecoshop.models import Vendor, Product
-from datetime import date,datetime
+from ecoshop.models import *
+from datetime import date, datetime
 import random
+from django.db.models import Count, Max, ExpressionWrapper, FloatField, Avg, Subquery
 
 
 def breadcrumb(title):
@@ -27,6 +28,8 @@ def breadcrumb(title):
     elif title == 'Contact':
         breadcrumb.append({'title': title, 'url': reverse('ecoshop:contact')})
     elif title == 'Tasks 3. Django':
+        breadcrumb.append({'title': title, 'url': reverse('ecoshop:tasks_3')})
+    elif title == 'Tasks 4. Django':
         breadcrumb.append({'title': title, 'url': reverse('ecoshop:tasks_3')})
 
     return {'breadcrumb': breadcrumb}
@@ -148,3 +151,60 @@ def tasks_3(request):
     context.update({'update_date': list(update_date.values())})
 
     return render(request, 'tasks_3.html', context)
+
+
+def tasks_4(request):
+    context = breadcrumb("Tasks 4. Django")
+
+    product = Product.objects.filter(vendors__name='Curtis Family Vineyard')
+    context.update({'product': list(product.values())})
+
+    product_gt_with_review = Product.objects.filter(price__gt=30, review__isnull=False).annotate(
+        num_reviews=Count('review'))
+    context.update({'product_gt_with_review': list(product_gt_with_review.values())})
+
+    product_with_author_review = Product.objects.filter(review__author=11)
+    context.update({'product_with_author_review': list(product_with_author_review.values())})
+
+    vendor_with_fruit = Vendor.objects.filter(product__category__name="Health Drinks")
+    context.update({'vendor_with_fruit': list(vendor_with_fruit.values())})
+
+    customer_with_passport = Customer.objects.filter(passport__isnull=False)
+    context.update({'customer_with_passport': list(customer_with_passport.values())})
+
+    # Отсебятина  (рейтинг то изначально сделал выставляемый) Вывести всех продавцов и покупателей с максимальным средним рейтингом
+
+    # находим максимальный средний рейтинг
+    max_avg_rating = VendorRating.objects.values('vendor_id').annotate(
+        max_avg_rating=Avg('rating')).order_by('-max_avg_rating')[:1]
+
+    # нахождение вендоров с максимальным рейтингом
+    top_vendor = VendorRating.objects.values('vendor__name').annotate(
+        max_avg_rating=Avg('rating')
+    ).filter(max_avg_rating=max_avg_rating[0]['max_avg_rating'])
+
+    context.update({'top_vendor': list(top_vendor)})
+
+    # находим максимальный средний рейтинг
+    max_avg_rating = CustomerRating.objects.values('customer_id').annotate(
+        max_avg_rating=Avg('rating')).order_by('-max_avg_rating')[:1]
+
+    # нахождение покупателей с максимальным рейтингом
+    top_customer = CustomerRating.objects.values('customer__name').annotate(
+        max_avg_rating=Avg('rating')
+    ).filter(max_avg_rating=max_avg_rating[0]['max_avg_rating'])
+
+    context.update({'top_customer': list(top_customer)})
+
+    product_without_comments = Product.objects.filter(review__isnull=True)
+    context.update({'product_without_comments': list(product_without_comments)})
+
+    customer_with_count_products = Customer.objects.annotate(
+        product_count=Count('product')
+    ).values('id', 'name', 'product_count').filter(product_count__gt=3).order_by('-product_count')
+    context.update({'customer_with_count_products': list(customer_with_count_products)})
+
+    product_with_other_vendors = Product.objects.annotate(vendor_count=Count('vendors')).values('name','vendor_count').filter(vendor_count__gt=1)
+    context.update({'product_with_other_vendors': list(product_with_other_vendors)})
+
+    return render(request, 'tasks_4.html', context)

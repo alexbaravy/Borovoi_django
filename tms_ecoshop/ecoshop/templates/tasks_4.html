@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>6) Получить все продукты, принадлежащие определенному поставщику (поставщику с именем "Curtis Family
+    Vineyard"):</h2>
+
+<ul>
+    {% for item in product %}
+    <li><a href="{{ item.id }}">{{item.name}}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>7) Получить все отзывы о продуктах для товара, который имеет цену меньше 30.</h2>
+<ul>
+    {% for item in product_gt_with_review %}
+    <li><a href="{{ item.id }}">{{item.name}}</a> Price: {{item.price}} Reviews: {{item.num_reviews}}</li>
+    {% endfor %}
+</ul>
+
+
+<h2>8) Получить все товары, которые имеют обзоры от конкретного автора (например, автора с именем "11")</h2>
+<ul>
+    {% for item in product_with_author_review %}
+    <li><a href="{{ item.id }}">{{item.name}}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>9) Вывести всех поставщиков которые поставляли Health Drinks.</h2>
+<ul>
+    {% for item in vendor_with_fruit %}
+    <li><a href="{{ item.id }}">{{item.name}}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>10) Вывести покупателей у которых есть паспорта.</h2>
+<ul>
+    {% for item in customer_with_passport %}
+    <li><a href="{{ item.id }}">{{item.name}}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>11) Вывести всех поставщиков и покупателей с максимальным средним рейтингом(.</h2>
+<h3>Vendors</h3>
+<ul>
+    {% for item in top_vendor %}
+    <li><a href="{{ item.id }}">{{item.vendor__name}}</a> Rating: {{item.max_avg_rating}}</li>
+    {% endfor %}
+</ul>
+<h3>Customers</h3>
+<ul>
+    {% for item in top_customer %}
+    <li><a href="{{ item.id }}">{{item.customer__name}}</a> Rating: {{item.max_avg_rating}}
+    </li>
+    {% endfor %}
+</ul>
+
+<h2>12)	Вывести все продукты у которых нет ни одного комментария.</h2>
+<ul>
+{% for item in product_without_comments|slice:"10" %}
+<li><a href="{{ item.id }}">{{item.name}}</a></li>
+{% endfor %}
+</ul>
+
+<h2>13)	Вывести покупателей, который покупали более 3 различных продуктов.</h2>
+<ul>
+{% for item in customer_with_count_products %}
+<li><a href="{{ item.id }}">{{item.name}}</a> Count: {{item.product_count}}</li>
+{% endfor %}
+</ul>
+
+<h2>14)	* Получить все продукты, которые имеют больше одного поставщика.</h2>
+<ul>
+{% for item in product_with_other_vendors %}
+<li><a href="{{ item.id }}">{{item.name}}</a> Count: {{item.vendor_count}}</li>
+{% endfor %}
+</ul>
+{% endblock %}
