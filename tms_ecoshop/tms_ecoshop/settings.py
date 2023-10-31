@@ -36,9 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ecoshop',
     'django_extensions',
-    'debug_toolbar'
+    'debug_toolbar',
+    'django_seed',
+    'ecoshop.apps.EcoshopConfig',
+    'factory_generator',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [

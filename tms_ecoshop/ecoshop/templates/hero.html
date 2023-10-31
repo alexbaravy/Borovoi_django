@@ -11,7 +11,7 @@
                         </div>
                         <ul>
                             {% for item in products_categories %}
-                                <li><a href="{% url 'ecoshop:shop_grid' item.url %}">{{item.name}}</a></li>
+                                <li><a href="{% url 'ecoshop:shop_grid' item.url %}">{{item.name}} ({{item.product_count}})</a></li>
                             {% endfor %}
                         </ul>
                     </div>

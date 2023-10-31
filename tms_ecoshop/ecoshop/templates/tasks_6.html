@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>2)	Получить среднюю цену продукта.:</h2>
+
+<ul>
+    <li>{{avg_price}}</li>
+</ul>
+
+<h2>3. Получить суммарное количество продуктов каждой категории</h2>
+<ul>
+    {% for item in product_count_categories %}
+    <li>{{item.name}} - Count products: {{item.product_count}}</li>
+    {% endfor %}
+</ul>
+
+
+<h2>4)	Получить количество отзывов для каждого продукта</h2>
+<ul>
+    {% for item in review_count_product|slice:"10" %}
+     <li>{{item.name}} - Count reviews: {{item.review_count}}</li>
+    {% endfor %}
+</ul>
+
+<h2>5)	Получить общее количество продуктов, у которых цена больше 50.</h2>
+<ul>
+     <li>Count Price Over 50: {{price_over_50}}</li>
+</ul>
+
+<h2>6)	Получить максимальную цену для каждой категории продуктов.</h2>
+<ul>
+    {% for item in max_price_category %}
+    <li>{{item.name}} - Max price: {{item.max_price}}</li>
+    {% endfor %}
+</ul>
+
+<h2>7)	Получить суммарное количество продуктов и среднюю цену для каждого поставщика.</h2>
+<ul>
+    {% for item in count_avg_vendor %}
+    <li>{{item.name}} - Count Products: {{item.product_sum}} - AVG price: {{item.avg_price}}</li>
+    {% endfor %}
+</ul>
+
+<h2>8)	Получить общее количество продуктов и среднее количество отзывов для каждого поставщика.</h2>
+<ul>
+    {% for item in avg_review_product_vendor %}
+    <li>{{item.name}} - Count Products: {{item.count_products}} - AVG review: {{item.avg_reviews}}</li>
+    {% endfor %}
+</ul>
+
+<h2>9)	*Получить среднее количество продуктов для каждой категории, а также суммарное количество отзывов для продуктов каждой категории.</h2>
+<ul>
+{% for item in count_product_rating_category %}
+<li>{{item.category__name}} -  Count: {{item.count_products}} - Reviews: {{item.count_reviews}}</li>
+{% endfor %}
+</ul>
+
+<h2>10)	*Получить общее количество продуктов для каждого поставщика и среднее количество отзывов для продуктов каждого поставщика.</h2>
+<ul>
+    {% for item in avg_review_product_vendor2 %}
+    <li>{{item.vendor__name}} - Count Products: {{item.count_products}} - AVG review: {{item.avg_reviews}}</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

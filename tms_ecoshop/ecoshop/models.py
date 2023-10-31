@@ -4,34 +4,38 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    url = models.CharField(max_length=100, default='Wrong')
+
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
 
 
-class Vendor(models.Model):
+class User(models.Model):
     name = models.CharField(max_length=100)
     address = models.TextField(null=True)
     email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=16)
+
+
+class Vendor(User):
     inn = models.CharField(max_length=12, null=True)
-
+    products = models.ManyToManyField("Product")
     def __str__(self):
         return self.name
 
 
-class Customer(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.TextField(null=True)
-    email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=15)
-
+class Customer(User):
+    discount = models.FloatField(default=0)
+    products = models.ManyToManyField("Product")
     def __str__(self):
         return self.name
 
 
 class Passport(models.Model):
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    customer = models.OneToOneField("Customer", on_delete=models.CASCADE)
     passport_number = models.CharField(max_length=10)
     passport_series = models.CharField(max_length=10)
 
@@ -43,38 +47,41 @@ class Product(models.Model):
     amount = models.PositiveIntegerField()
     date = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    vendors = models.ManyToManyField(Vendor)
-    customers = models.ManyToManyField(Customer)
+
 
     def __str__(self):
         return self.name
 
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    RATING_CHOICES = [(i, i) for i in range(1, 11)]
     title = models.CharField(max_length=100)
     description = models.TextField()
-    author = models.CharField(max_length=100)
-    date = models.DateTimeField(default=timezone.now)
-
-
-class VendorRating(models.Model):
-    RATING_CHOICES = [(i, i) for i in range(1, 11)]
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(choices=RATING_CHOICES)
-    author = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        db_table = 'ecoshop_vendor_rating'
+        abstract = True
 
 
-class CustomerRating(models.Model):
-    RATING_CHOICES = [(i, i) for i in range(1, 11)]
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    rating = models.PositiveIntegerField(choices=RATING_CHOICES)
-    author = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=timezone.now)
+class ProductReview(Review):
+    product = models.ForeignKey("Product", on_delete=models.CASCADE)
+    author = models.ForeignKey("Customer", on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'ecoshop_customer_rating'
+        db_table = 'ecoshop_product_reviews'
+
+
+class VendorReview(Review):
+    vendor = models.ForeignKey("Vendor", on_delete=models.CASCADE)
+    author = models.ForeignKey("Customer", on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'ecoshop_vendor_reviews'
+
+
+class CustomerReview(Review):
+    customer = models.ForeignKey("Customer", on_delete=models.CASCADE)
+    author = models.ForeignKey("Vendor", on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'ecoshop_customer_reviews'
