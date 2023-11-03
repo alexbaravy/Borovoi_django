@@ -6,11 +6,7 @@ class EcoshopConfig(AppConfig):
     name = 'ecoshop'
     verbose_name = "Eco Shop"
 
-# from django.utils.translation import ugettext_lazy as _
-#
-# class ProfilesConfig(AppConfig):
-#     name = 'cmdbox.profiles'
-#     verbose_name = _('profiles')
-#
-#     def ready(self):
-#         import cmdbox.profiles.signals  # noqa
+    def ready(self):
+        import ecoshop.signals
+
+

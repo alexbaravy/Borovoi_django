@@ -279,6 +279,9 @@ def customer_detail(request, customer_id):
         Prefetch('products', queryset=Product.objects.annotate(product_count=Count('id'), total=ExpressionWrapper(
             F('price') * F('product_count'), output_field=FloatField())))).get(pk=customer_id)
 
+    if customer_detail.customer_avg_rating is not None:
+        customer_detail.customer_avg_rating = round(customer_detail.customer_avg_rating, 2)
+
     context = breadcrumb(customer_detail.name)
     context['breadcrumb'].extend(
         [{'title': 'Customers', 'url': reverse('ecoshop:customers')},
@@ -288,8 +291,6 @@ def customer_detail(request, customer_id):
 
     # customer_detail = Customer.objects.select_related('passport').prefetch_related(
     #     'customerreview_set').annotate(customer_avg_rating=Avg('customerreview__rating')).get(pk=customer_id)
-
-    customer_detail.customer_avg_rating = round(customer_detail.customer_avg_rating, 2)
 
     context.update({'customer_detail': customer_detail})
 

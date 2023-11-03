@@ -30,6 +30,7 @@ class Vendor(User):
 class Customer(User):
     discount = models.FloatField(default=0)
     products = models.ManyToManyField("Product")
+
     def __str__(self):
         return self.name
 
@@ -71,6 +72,9 @@ class ProductReview(Review):
     class Meta:
         db_table = 'ecoshop_product_reviews'
 
+    def __str__(self):
+        return self.title
+
 
 class VendorReview(Review):
     vendor = models.ForeignKey("Vendor", on_delete=models.CASCADE)
@@ -79,9 +83,16 @@ class VendorReview(Review):
     class Meta:
         db_table = 'ecoshop_vendor_reviews'
 
+    def __str__(self):
+        return self.title
+
 
 class CustomerReview(Review):
     customer = models.ForeignKey("Customer", on_delete=models.CASCADE)
     author = models.ForeignKey("Vendor", on_delete=models.CASCADE)
     class Meta:
         db_table = 'ecoshop_customer_reviews'
+
+
+    def __str__(self):
+        return self.title
