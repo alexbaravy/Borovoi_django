@@ -12,9 +12,9 @@
                         {% endif %}
                     {% endfor %}
                     <div class="breadcrumb__option">
-                        {% for item in breadcrumb %}
-                            {% if forloop.last %}
-                                <span> {{ item.title }}</span>
+                            {% for item in breadcrumb|slice:"-1" %}
+                            {% if not forloop.last %}
+                                <a href="{{ item.url }}">{{ item.title }}</a> <span style="color:#ffffff">—</span>
                             {% else%}
                                 <a href="{{ item.url }}">{{ item.title }}</a>
                             {% endif %}

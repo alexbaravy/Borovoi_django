@@ -9,14 +9,14 @@
   display: block;
   float: left;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
-  height: 42px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 48px;
   outline: none;
   padding-left: 18px;
   padding-right: 30px;
-  position: relative;
+  position: absolute;
   text-align: left !important;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -25,7 +25,7 @@
       -ms-user-select: none;
           user-select: none;
   white-space: nowrap;
-  width: auto; }
+  width: 50%; }
   .nice-select:hover {
     border-color: #dbdbdb; }
   .nice-select:active, .nice-select.open, .nice-select:focus {

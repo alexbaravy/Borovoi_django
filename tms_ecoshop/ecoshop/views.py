@@ -1,13 +1,17 @@
 from django.db.models.functions import Round
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 import json
 import os
-from ecoshop.models import Category, Customer, Passport, Product, Vendor, ProductReview
+from ecoshop.models import Category, Customer, CustomerReview, Passport, Product, ProductReview, Vendor, VendorReview
 from datetime import date, datetime
 import random
 from django.db.models import Count, Max, ExpressionWrapper, FloatField, Avg, Subquery, F, Sum, Prefetch
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
+from .forms import CustomerReviewForm, ProductForm, ProductReviewForm, VendorReviewForm, ProductFormCrispy
+from django.views.generic import UpdateView
 
 
 def breadcrumb(title):
@@ -47,11 +51,10 @@ def index(request):
 
 
 def shop_grid(request, category=None):
-    print(category)
     context = breadcrumb("Shop")
     context['breadcrumb'].append({'title': "Shop", 'url': reverse('ecoshop:shop_grid')})
 
-    json_data = load_json_data('saleoff.json', 'sale.json', 'products_latest.json')
+    # json_data = load_json_data('saleoff.json', 'sale.json', 'products_latest.json')
     hero_menu = hero(request)
 
     category_data = None
@@ -60,7 +63,7 @@ def shop_grid(request, category=None):
             category_data = data
             break
 
-    context.update(json_data)
+    # context.update(json_data)
     context.update(hero_menu)
 
     context['current_category'] = category_data
@@ -69,26 +72,76 @@ def shop_grid(request, category=None):
             {'title': context['current_category']['name'], 'url': context['current_category']['url']})
 
     if category is None:
-        products = Product.objects.all()[:16]
+        products = Product.objects.all()
     else:
-        products = Product.objects.filter(category=category_data['id'])[:16]
+        products = Product.objects.filter(category=category_data['id'])
+
+    paginator = Paginator(products, 64)
+    page = request.GET.get('page')
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(
+            paginator.num_pages)
 
     context.update({'products': list(products)})
+
+    if products.has_previous():
+        print(123)
+    else:
+        print(222)
 
     return render(request, "shop_grid.html", context)
 
 
-def shop_details(request):
+def handle_review_form(request, context, detail_object, author, model):
+    author_ids = list(author.objects.values_list('id', flat=True))
+    random_author = author.objects.get(id=random.choice(author_ids))
+    context.update({'random_author': random_author})
+
+    if request.method == 'POST':
+        review_form = model(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.customer = detail_object if hasattr(detail_object, 'id') else None
+            review.product = detail_object if hasattr(detail_object, 'id') else None
+            review.vendor = detail_object if hasattr(detail_object, 'id') else None
+            review.author = random_author
+            review.save()
+            messages.success(request, 'Review added successfully')
+
+            # url = reverse('ecoshop:product_details', args=[detail_object.category.url, detail_object.id])
+            return redirect(request.get_full_path())
+        else:
+            messages.success(request, 'WTF?')
+    else:
+        review_form = model
+
+    return review_form
+
+
+def product_details(request, category_url, id):
     context = breadcrumb("Shop Details")
+
+    product_details = Product.objects.annotate(count_reviews=Count('productreview')).prefetch_related(
+        'productreview_set').get(pk=id)
+    context.update({'product_details': product_details})
+
     context['breadcrumb'].extend([
         {'title': 'Shop', 'url': reverse('ecoshop:shop_grid')},
-        {'title': 'Shop Detail', 'url': reverse('ecoshop:shop_details')}
+        {'title': product_details.category, 'url': reverse('ecoshop:shop_grid', args=[product_details.category.url])},
+        {'title': product_details.name, 'url': reverse('ecoshop:shop_grid')}
     ])
 
-    json_data = load_json_data('sale.json')
-    context.update(json_data)
     context.update(hero(request))
-    return render(request, "shop_details.html", context)
+
+    review_form = handle_review_form(request, context, product_details, Customer, ProductReviewForm)
+    context.update({'review_form': review_form})
+
+    return render(request, "product_details.html", context)
 
 
 def shoping_cart(request):
@@ -237,26 +290,29 @@ def vendors(request):
     return render(request, 'vendors.html', context)
 
 
-def vendor_detail(request, vendor_id):
+def vendor_details(request, vendor_id):
     context = breadcrumb("Vendor Detail")
 
-    vendor_detail = Vendor.objects.annotate(vendor_avg_rating=Avg('vendorreview__rating')).prefetch_related(
+    vendor_details = Vendor.objects.annotate(vendor_avg_rating=Avg('vendorreview__rating')).prefetch_related(
         'vendorreview_set').prefetch_related(
         Prefetch('products', queryset=Product.objects.annotate(product_reviews=Count('productreview')))).get(
         pk=vendor_id)
 
     context['breadcrumb'].extend([
         {'title': "Vendors", 'url': reverse('ecoshop:vendors')},
-        {'title': vendor_detail.name, 'url': reverse('ecoshop:vendor_detail', args=[vendor_id])}
+        {'title': vendor_details.name, 'url': reverse('ecoshop:vendor_details', args=[vendor_id])}
     ])
 
     context.update(hero(request))
 
-    vendor_detail.vendor_avg_rating = round(vendor_detail.vendor_avg_rating, 2)
+    vendor_details.vendor_avg_rating = round(vendor_details.vendor_avg_rating, 2)
 
-    context.update({'vendor_detail': vendor_detail})
+    context.update({'vendor_details': vendor_details})
 
-    return render(request, 'vendor_detail.html', context)
+    review_form = handle_review_form(request, context, vendor_details, Customer, VendorReviewForm)
+    context.update({'review_form': review_form})
+
+    return render(request, 'vendor_details.html', context)
 
 
 def customers(request):
@@ -273,55 +329,33 @@ def customers(request):
     return render(request, 'customers.html', context)
 
 
-def customer_detail(request, customer_id):
-    customer_detail = Customer.objects.select_related('passport').prefetch_related(
+def customer_details(request, customer_id):
+    customer_details = Customer.objects.select_related('passport').prefetch_related(
         'customerreview_set').annotate(customer_avg_rating=Avg('customerreview__rating')).prefetch_related(
         Prefetch('products', queryset=Product.objects.annotate(product_count=Count('id'), total=ExpressionWrapper(
             F('price') * F('product_count'), output_field=FloatField())))).get(pk=customer_id)
 
-    if customer_detail.customer_avg_rating is not None:
-        customer_detail.customer_avg_rating = round(customer_detail.customer_avg_rating, 2)
+    if customer_details.customer_avg_rating is not None:
+        customer_details.customer_avg_rating = round(customer_details.customer_avg_rating, 2)
 
-    context = breadcrumb(customer_detail.name)
+    context = breadcrumb(customer_details.name)
     context['breadcrumb'].extend(
         [{'title': 'Customers', 'url': reverse('ecoshop:customers')},
-         {'title': customer_detail.name, 'url': reverse('ecoshop:customer_detail', args=[customer_id])}])
+         {'title': customer_details.name, 'url': reverse('ecoshop:customer_details', args=[customer_id])}])
 
     context.update(hero(request))
 
-    # customer_detail = Customer.objects.select_related('passport').prefetch_related(
-    #     'customerreview_set').annotate(customer_avg_rating=Avg('customerreview__rating')).get(pk=customer_id)
+    context.update({'customer_details': customer_details})
 
-    context.update({'customer_detail': customer_detail})
-
-    # customer_purchases = Product.objects.annotate(product_count=Count('id')).filter(customers__id=customer_id)
-    # customer_purchases = Product.objects.annotate(product_count=Count('id')).filter(customers__id=customer_id).annotate(
-    #     total=ExpressionWrapper(F('price') * F('product_count'), output_field=FloatField())
-    # ).values('id', 'name', 'price', 'product_count', 'total')
-
-    # context.update({'customer_purchases': customer_purchases})
-
-    total_amount = customer_detail.products.aggregate(total_amount=Sum('total'))['total_amount']
+    total_amount = customer_details.products.aggregate(total_amount=Sum('total'))['total_amount']
 
     context.update({'total_amount': total_amount})
 
-    return render(request, 'customer_detail.html', context)
+    review_form = handle_review_form(request, context, customer_details, Vendor, CustomerReviewForm)
+    context.update({'review_form': review_form})
 
+    return render(request, 'customer_details.html', context)
 
-# def customer_detail(request, customer_id):
-#     context = breadcrumb("Customer Detail")
-#     context.update({'customer_id': customer_id})
-#
-#     # customer_detail = Customer.objects.select_related('passport')
-#
-#     customer_detail = Passport.objects.all()
-#
-#     for customer in customer_detail:
-#         print(customer.customer)
-#
-#     print(customer_detail)
-#
-#     return render(request, 'customer_detail.html', context)
 
 def tasks_6(request):
     context = breadcrumb("Tasks 6. Django")
@@ -395,3 +429,23 @@ def tasks_6(request):
     context.update({'avg_review_product_vendor2': avg_review_product_vendor2})
 
     return render(request, 'tasks_6.html', context)
+
+
+''' Start Forms '''
+
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductFormCrispy(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Product added successfully')
+            return redirect('ecoshop:add_product')
+        else:
+            messages.success(request, 'WTF?')
+    else:
+        form = ProductFormCrispy()
+
+    return render(request, 'form_add_product.html', {'form': form})
+
+

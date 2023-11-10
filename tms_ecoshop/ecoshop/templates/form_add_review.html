@@ -1,0 +1,28 @@
+<!-- Form Add Review Section Begin -->
+<div class="contact-form spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="contact__form__title">
+                    <h2>Add Review from {{ random_author.name }}</h2>
+                </div>
+            </div>
+        </div>
+        <form method="post" action="{% if product_details %}{% url 'ecoshop:product_details' product_details.category.url product_details.id %}
+{% elif vendor_details %}{% url 'ecoshop:vendor_details' vendor_details.id %}
+{% elif customer_details %}{% url 'ecoshop:customer_details' customer_details.id %}
+{% endif %}">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% csrf_token %}
+                    {{ review_form.as_p }}
+                </div>
+            </div>
+            <div class="col-lg-12 text-center" style="margin-top:80px">
+                <button type="submit" class="site-btn">Add Review</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<!-- Form Add Review Section End -->
