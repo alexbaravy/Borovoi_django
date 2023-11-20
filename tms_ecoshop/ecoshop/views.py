@@ -150,6 +150,9 @@ def customers(request):
     context = breadcrumb("Customers")
 
     customers = Customer.objects.all()
+
+    print(customers)
+
     page_obj = get_paginator(request, customers, items_per_page=16)
 
     context.update({'items': page_obj})
@@ -251,10 +254,12 @@ def product_details(request, category_url, id):
 def vendors(request):
     context = breadcrumb("Vendors")
 
-    vendors = Vendor.objects.annotate(product_count=Count('products', distinct=True),
-                                      review_count=Count('vendorreview', distinct=True)).values('id', 'name', 'photo',
-                                                                                                'product_count',
-                                                                                                'review_count')
+    # vendors = Vendor.objects.annotate(product_count=Count('products', distinct=True),
+    #                                   review_count=Count('vendorreview', distinct=True)).values('id', 'name', 'photo',
+    #                                                                                             'product_count',
+    #
+    #                                                                                             'review_count')
+    vendors = Vendor.objects.all()
 
     page_obj = get_paginator(request, vendors, items_per_page=16)
     context.update({'items': page_obj})

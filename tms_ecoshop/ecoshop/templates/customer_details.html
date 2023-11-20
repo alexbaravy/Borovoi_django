@@ -16,7 +16,8 @@
                     <table>
                         <thead>
                         <tr>
-                            <th class="shoping__product">Name</th>
+                            <th>Photo</th>
+                            <th>Name</th>
                             <th>Address</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -26,6 +27,9 @@
                         </thead>
                         <tbody>
                         <tr>
+                            <td>
+                                <img height="100px" width="100px" src="{{customer_details.photo.url}}" alt="">
+                            </td>
                             <td>
                                 {{customer_details.name}}
                             </td>
@@ -70,7 +74,7 @@
                         {% for item in customer_details.products.all %}
                         <tr>
                             <td class="shoping__cart__item">
-                                <img src="{% static 'img/cart/cart-1.jpg' %}" alt="">
+                                <img height="70px" width="70px" src="{{item.photo.url}}" alt="">
                                 <h5>{{item.name}}</h5>
                             </td>
                             <td class="shoping__cart__price">
