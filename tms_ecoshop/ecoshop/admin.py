@@ -2,50 +2,47 @@ from django.contrib import admin
 from django.db.models import Count
 from django.utils.html import format_html
 from ecoshop.models import Customer, CustomerReview, Passport, Product, ProductReview, Vendor, VendorReview, Category
-
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     list_display = ['name', 'price', 'amount', 'category']
-#
-#     @admin.display(description='name')
-#     def view_name(self, obj):
-#         return obj.name[:10]
-
+from django.utils.safestring import mark_safe
 
 ''' Start Block Inline '''
 
 
-class ProductInLine(admin.TabularInline):
+class BaseInLine(admin.TabularInline):
+    extra = 1
+
+
+class ProductInLine(BaseInLine):
     model = Product
-    extra = 1
 
 
-class PassportInLine(admin.TabularInline):
+class PassportInLine(BaseInLine):
     model = Passport
-    extra = 1
 
 
-class VendorReviewInLine(admin.TabularInline):
+class VendorReviewInLine(BaseInLine):
     model = VendorReview
-    extra = 1
 
 
-class ProductReviewInLine(admin.TabularInline):
+class ProductReviewInLine(BaseInLine):
     model = ProductReview
-    extra = 1
 
 
-class CustomerReviewInLine(admin.TabularInline):
+class CustomerReviewInLine(BaseInLine):
     model = CustomerReview
-    extra = 1
 
 
 ''' End Block Inline '''
 
 
+@admin.display(description='photo')
+def get_html_photo(objects):
+    if objects.photo:
+        return mark_safe(f'<img src={objects.photo.url} width=50>')
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'product_count']
+    list_display = ['name', 'product_count', get_html_photo]
 
     # inlines = [ProductInLine]
 
@@ -76,7 +73,7 @@ class CountReviewMixin():
 
 @admin.register(Customer)
 class CustomerAdmin(CountReviewMixin, admin.ModelAdmin):
-    list_display = ['name', 'address', 'email', 'phone', 'count_review']
+    list_display = ['name', 'address', 'email', 'phone', 'count_review', get_html_photo]
     search_fields = ['name', 'address', 'email', 'phone']
     count_field = 'customerreview'
     # filter_horizontal = ('products',)
@@ -104,7 +101,7 @@ class ProductAdmin(CountReviewMixin, admin.ModelAdmin):
 
     mark_amount.short_description = "Mark as zero amount"
 
-    list_display = ['name', 'price', 'amount', 'date', 'count_review']
+    list_display = ['name', 'price', 'amount', 'date', 'count_review', get_html_photo]
     search_fields = ['name', 'price', 'amount', 'date']
     list_filter = ('category',)
     count_field = 'productreview'
@@ -113,7 +110,7 @@ class ProductAdmin(CountReviewMixin, admin.ModelAdmin):
 
 @admin.register(Vendor)
 class VendorAdmin(CountReviewMixin, admin.ModelAdmin):
-    list_display = ['name', 'address', 'email', 'phone', 'count_review']
+    list_display = ['name', 'address', 'email', 'phone', 'count_review', get_html_photo]
     search_fields = ['name', 'address', 'email', 'phone']
     count_field = 'vendorreview'
     # filter_horizontal = ('products',)

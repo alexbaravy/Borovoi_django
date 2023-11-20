@@ -10,11 +10,11 @@ urlpatterns = [
     # http://127.0.0.1:8000/ecoshop/
     path("", views.index, name="index"),
     # http://127.0.0.1:8000/ecoshop/shop-grid/
-    path("shop-grid/", views.shop_grid, name="shop_grid"),
+    path("products/", views.products, name="products"),
     # http://127.0.0.1:8000/ecoshop/shop-grid/product-details/
     # path("shop-grid/product-details/", views.product_details, name="product_details"),
-    path("shop-grid/<str:category>/", views.shop_grid, name="shop_grid"),
-    path("shop-grid/<str:category_url>/<int:id>/", views.product_details, name="product_details"),
+    path("products/<str:category>/", views.products, name="products"),
+    path("products/<str:category_url>/<int:id>/", views.product_details, name="product_details"),
     # http://127.0.0.1:8000/ecoshop/shoping-cart/
     path("shoping-cart/", views.shoping_cart, name="shoping_cart"),
     # http://127.0.0.1:8000/ecoshop/checkout/

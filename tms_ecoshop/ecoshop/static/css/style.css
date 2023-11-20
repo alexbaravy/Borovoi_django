@@ -1607,12 +1607,13 @@ ol {
 .product__pagination,
 .blog__pagination {
 	padding-top: 10px;
+	align: center
 }
 
 .product__pagination a,
 .blog__pagination a {
 	display: inline-block;
-	width: 30px;
+	min-width: 50px;
 	height: 30px;
 	border: 1px solid #b2b2b2;
 	font-size: 14px;
@@ -1626,6 +1627,7 @@ ol {
 	-ms-transition: all, 0.3s;
 	-o-transition: all, 0.3s;
 	transition: all, 0.3s;
+
 }
 
 .product__pagination a:hover,

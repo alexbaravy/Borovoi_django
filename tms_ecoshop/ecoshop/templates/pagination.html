@@ -1,0 +1,50 @@
+<div class="product__pagination text-center">
+    {% if items.has_previous %}
+
+    {% if items.number > 3 %}
+    <a href="?page=1" title="First" alt="First"><i class="fa fa-angle-double-left"></i></a>
+    <a href="?page={{ items.previous_page_number }}" title="Previous" alt="Previous"><i
+            class="fa fa-angle-left"></i></a>
+    {% endif %}
+
+
+    {% if items.number|add:-5 > 0 %}
+    <a href="?page={{ items.number|add:-5 }}" title="-5" alt="-5" style="width:90px"><i
+            class="fa fa-ellipsis-h"></i></a>
+    {% endif %}
+
+    {% if items.number|add:-2 > 0 %}
+    <a href="?page={{ items.number|add:-2 }}">{{ items.number|add:-2 }}</a>
+    {% endif %}
+
+    {% if items.number|add:-1 > 0 %}
+    <a href="?page={{ items.number|add:-1 }}">{{ items.number|add:-1 }}</a>
+    {% endif %}{% endif %}
+
+    <a href="?page={{ items.number}}"
+       style="background: #7fad39; border-color: #7fad39; color: #ffffff;">{{items.number}}</a>
+
+
+    {% if items.has_next %}
+    {% if items.number|add:1 <= items.paginator.num_pages %}
+    <a href="?page={{ items.number|add:1 }}">{{ items.number|add:1 }}</a>
+    {% endif %}
+
+    {% if items.number|add:2 <= items.paginator.num_pages %}
+    <a href="?page={{ items.number|add:2 }}">{{ items.number|add:2 }}</a>
+    {% endif %}
+
+    {% if items.number|add:5 < items.paginator.num_pages %}
+    <a href="?page={{ items.number|add:5 }}" title="+5" alt="+5" style="width:90px"><i
+            class="fa fa-ellipsis-h"></i></a>
+    {% endif %}
+
+    {% if items.next_page_number != items.paginator.num_pages %}
+    <a href="?page={{ items.next_page_number }}" title="Next" alt="Next"><i
+            class="fa fa-angle-right"></i></a>
+    <a href="?page={{ items.paginator.num_pages }}" title="Last" alt="Last"><i
+            class="fa fa-angle-double-right"></i></a>
+    {% endif %}
+    {% endif %}
+</div>
+<!-- Pagination End-->
