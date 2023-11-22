@@ -19,7 +19,7 @@ from .pagination import LargeResultsSetPagination, StandardResultsSetPagination
 
 
 class ProductsList(APIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # http://127.0.0.1:8000/api/v1/products/?search=19.99&ordering=amount&category=3

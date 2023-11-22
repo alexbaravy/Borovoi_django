@@ -13,6 +13,9 @@ from django.contrib import messages
 from .forms import CustomerReviewForm, ProductForm, ProductReviewForm, VendorReviewForm, ProductFormCrispy
 from django.views.generic import UpdateView
 
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+
 
 def breadcrumb(title):
     breadcrumb = [{'title': 'Home', 'url': reverse('ecoshop:index')}]
@@ -56,6 +59,11 @@ def handle_review_form(request, context, detail_object, author, model):
             review.save()
             messages.success(request, 'Review added successfully')
 
+            if hasattr(detail_object, 'id'):
+                if isinstance(detail_object, Vendor):
+                    cache_key = 'vendors_page'
+                    cache.delete(cache_key)
+
             return redirect(request.get_full_path())
         else:
             messages.success(request, 'WTF?')
@@ -71,6 +79,9 @@ def add_product(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Product added successfully')
+            cache_keys = ['categories_page', 'vendors_page', 'products_page_all',
+                          f'products_page_{request.POST["category"]}']
+            cache.delete_many(cache_keys)
             return redirect('ecoshop:add_product')
         else:
             messages.success(request, 'WTF?')
@@ -96,10 +107,15 @@ def load_json_data(*json_files):
 
 # categories menu with count products
 def hero(request):
-    categories = Category.objects.annotate(product_count=Count('product'))
+    cache_key = 'categories_page'
+    categories = cache.get(cache_key)
+    if categories is None:
+        categories = Category.objects.annotate(product_count=Count('product'))
+        cache.set(cache_key, categories, 60 * 30)
     return {'products_categories': list(categories.values())}
 
 
+@cache_page(60 * 10, cache='redis')
 def index(request):
     context = breadcrumb("Main")
     json_data = load_json_data('products_latest.json', 'products_featured.json')
@@ -145,13 +161,11 @@ def shoping_cart(request):
 
 ''' Customers Begin '''
 
-
+@cache_page(60 * 10, cache='redis')
 def customers(request):
     context = breadcrumb("Customers")
 
     customers = Customer.objects.all()
-
-    print(customers)
 
     page_obj = get_paginator(request, customers, items_per_page=16)
 
@@ -164,6 +178,7 @@ def customers(request):
     return render(request, 'customers.html', context)
 
 
+@cache_page(60 * 20, cache='static_html')
 def customer_details(request, customer_id):
     customer_details = Customer.objects.select_related('passport').prefetch_related(
         'customerreview_set').annotate(customer_avg_rating=Avg('customerreview__rating')).prefetch_related(
@@ -213,18 +228,25 @@ def products(request, category=None):
     if context['current_category']:
         context['breadcrumb'].append(
             {'title': context['current_category']['name'], 'url': context['current_category']['url']})
-
-    if category is None:
-        products = Product.objects.all().order_by('id')
+        cache_key = f"products_page_{context['current_category']['id']}"
+        products = cache.get(cache_key)
     else:
-        products = Product.objects.filter(category=category_data['id'])
+        cache_key = f"products_page_all"
+        products = cache.get(cache_key)
 
+    if products is None:
+        if category is None:
+            products = Product.objects.all().order_by('id')
+        else:
+            products = Product.objects.filter(category=category_data['id'])
+        cache.set(cache_key, products, 60 * 30)
     page_obj = get_paginator(request, products, items_per_page=64)
     context.update({'items': page_obj})
 
     return render(request, "products.html", context)
 
 
+@cache_page(60 * 20, cache='static_html')
 def product_details(request, category_url, id):
     context = breadcrumb("Shop Details")
 
@@ -253,14 +275,15 @@ def product_details(request, category_url, id):
 
 def vendors(request):
     context = breadcrumb("Vendors")
-
-    # vendors = Vendor.objects.annotate(product_count=Count('products', distinct=True),
-    #                                   review_count=Count('vendorreview', distinct=True)).values('id', 'name', 'photo',
-    #                                                                                             'product_count',
-    #
-    #                                                                                             'review_count')
-    vendors = Vendor.objects.all()
-
+    cache_key = 'vendors_page'
+    vendors = cache.get(cache_key)
+    if vendors is None:
+        vendors = Vendor.objects.annotate(product_count=Count('products', distinct=True),
+                                          review_count=Count('vendorreview', distinct=True)).values('id', 'name',
+                                                                                                    'photo',
+                                                                                                    'product_count',
+                                                                                                    'review_count')
+        cache.set(cache_key, vendors, 60 * 30)
     page_obj = get_paginator(request, vendors, items_per_page=16)
     context.update({'items': page_obj})
 
@@ -271,6 +294,7 @@ def vendors(request):
     return render(request, 'vendors.html', context)
 
 
+@cache_page(60 * 20, cache='static_html')
 def vendor_details(request, vendor_id):
     context = breadcrumb("Vendor Detail")
 

@@ -17,7 +17,7 @@ def user_dir_photo(instance, filename):
 class Category(models.Model):
     name = models.CharField(max_length=100)
     url = models.CharField(max_length=100, default='Wrong')
-    photo = models.ImageField(upload_to=user_dir_photo, default='img/image_not_found.jpg')
+    photo = models.ImageField(upload_to=user_dir_photo, default='image_not_found.jpg')
 
     class Meta:
         verbose_name_plural = 'Categories'
