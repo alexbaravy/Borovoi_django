@@ -1,8 +1,8 @@
 from django.urls import path
-
-
-
 from . import views
+# from .views import FeedbackFormView, SuccessView
+from django.contrib.auth.views import LoginView
+
 
 app_name = 'ecoshop'
 
@@ -41,4 +41,11 @@ urlpatterns = [
     path("tasks-6/", views.tasks_6, name="tasks_6"),
     # http://127.0.0.1:8000/ecoshop/add-product/
     path("add-product/", views.add_product, name="add_product"),
+    # http://127.0.0.1:8000/ecoshop/add-product/
+    path("sign-up/", views.sign_up, name="sign_up"),
+    path('accounts/login/', LoginView.as_view(), name='login'),
+
+    # path("feedback", FeedbackFormView.as_view(), name="feedback"),
+    # path("feedback/success/", SuccessView.as_view(), name="success"),
+
 ]

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
 
-from django.conf import settings  # убедитесь, что эта строка присутствует
+from django.conf import settings
 from django.conf.urls.static import static
 
 from rest_framework_simplejwt.views import (

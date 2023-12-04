@@ -34,7 +34,7 @@
 
         <!--        </form>-->
 
-        <form method="post" action="{% url 'ecoshop:add_product' %}">
+        <form method="post" enctype="multipart/form-data" action="{% url 'ecoshop:add_product' %}">
             <div class="row">
                 <div class="col-lg-12">
                     {% csrf_token %}

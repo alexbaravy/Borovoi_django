@@ -25,6 +25,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
+
 
 class User(models.Model):
     name = models.CharField(max_length=100)

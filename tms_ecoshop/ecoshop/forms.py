@@ -2,12 +2,14 @@ from django import forms
 from .models import Category, CustomerReview, Product, ProductReview, VendorReview
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'amount', 'category']
+        fields = ['name', 'description', 'photo', 'price', 'amount', 'category']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),
             'description': forms.Textarea(attrs={'placeholder': 'Enter description'}),
@@ -53,3 +55,11 @@ class ProductReviewForm(BaseReviewForm):
 class VendorReviewForm(BaseReviewForm):
     class Meta(BaseReviewForm.Meta):
         model = VendorReview
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+

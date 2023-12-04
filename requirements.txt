@@ -13,4 +13,7 @@ Markdown==3.5.1
 Pillow==10.1.0
 djoser==2.2.2
 django-redis==5.4.0
-
+celery~=5.3.6
+django-celery-beat==2.5.0
+flower==2.0.1
+Faker~=19.11.0

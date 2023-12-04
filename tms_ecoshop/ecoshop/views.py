@@ -10,11 +10,13 @@ import random
 from django.db.models import Count, Max, ExpressionWrapper, FloatField, Avg, Subquery, F, Sum, Prefetch
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from .forms import CustomerReviewForm, ProductForm, ProductReviewForm, VendorReviewForm, ProductFormCrispy
+from .forms import CustomerReviewForm, ProductForm, ProductReviewForm, VendorReviewForm, ProductFormCrispy, SignUpForm
 from django.views.generic import UpdateView
 
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
+from .tasks import generate_photo
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 def breadcrumb(title):
@@ -73,11 +75,30 @@ def handle_review_form(request, context, detail_object, author, model):
     return review_form
 
 
+@login_required()
 def add_product(request):
     if request.method == 'POST':
-        form = ProductFormCrispy(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            name = request.POST['name']
+            description = request.POST['description']
+            price = request.POST['price']
+            amount = request.POST['amount']
+            category = Category.objects.get(pk=request.POST['category'])
+            if 'photo' in request.FILES:
+                photo = request.FILES['photo']
+                product = Product(name=name,
+                                  description=description,
+                                  photo=photo,
+                                  price=price,
+                                  amount=amount,
+                                  category=category)
+
+                product.save()
+            else:
+                generate_photo.delay(name=name, description=description, price=price, amount=amount,
+                                     category_id=category.id)
+
             messages.success(request, 'Product added successfully')
             cache_keys = ['categories_page', 'vendors_page', 'products_page_all',
                           f'products_page_{request.POST["category"]}']
@@ -86,7 +107,7 @@ def add_product(request):
         else:
             messages.success(request, 'WTF?')
     else:
-        form = ProductFormCrispy()
+        form = ProductForm()
 
     return render(request, 'form_add_product.html', {'form': form})
 
@@ -126,6 +147,7 @@ def index(request):
 
 
 def blog(request):
+    add.delay(19, 6)
     context = breadcrumb("Blog")
     context['breadcrumb'].append({'title': 'Blog', 'url': reverse('ecoshop:blog')})
     context.update(hero(request))
@@ -161,6 +183,8 @@ def shoping_cart(request):
 
 ''' Customers Begin '''
 
+
+@permission_required('is_superuser', raise_exception=True)
 @cache_page(60 * 10, cache='redis')
 def customers(request):
     context = breadcrumb("Customers")
@@ -178,6 +202,7 @@ def customers(request):
     return render(request, 'customers.html', context)
 
 
+@permission_required('is_superuser', raise_exception=True)
 @cache_page(60 * 20, cache='static_html')
 def customer_details(request, customer_id):
     customer_details = Customer.objects.select_related('passport').prefetch_related(
@@ -246,7 +271,7 @@ def products(request, category=None):
     return render(request, "products.html", context)
 
 
-@cache_page(60 * 20, cache='static_html')
+# @cache_page(60 * 20, cache='static_html')
 def product_details(request, category_url, id):
     context = breadcrumb("Shop Details")
 
@@ -273,6 +298,7 @@ def product_details(request, category_url, id):
 ''' Vendors Begin '''
 
 
+@permission_required('is_superuser', raise_exception=True)
 def vendors(request):
     context = breadcrumb("Vendors")
     cache_key = 'vendors_page'
@@ -294,6 +320,7 @@ def vendors(request):
     return render(request, 'vendors.html', context)
 
 
+@permission_required('is_superuser', raise_exception=True)
 @cache_page(60 * 20, cache='static_html')
 def vendor_details(request, vendor_id):
     context = breadcrumb("Vendor Detail")
@@ -320,6 +347,22 @@ def vendor_details(request, vendor_id):
 
 
 ''' Vendors End '''
+
+
+def sign_up(request):
+    context = breadcrumb("Sign up")
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ecoshop:sign_up')
+        else:
+            messages.success(request, 'WTF?')
+    else:
+        form = SignUpForm()
+
+    return render(request, 'form_sign_up.html', {'form': form})
+
 
 ''' Tasks Begin '''
 

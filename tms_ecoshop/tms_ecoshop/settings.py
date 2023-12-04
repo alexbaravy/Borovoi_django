@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'rest_framework_simplejwt',
+    'django_celery_results',
+    'django_celery_beat',
 
 ]
 
@@ -184,7 +186,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
     'DEFAULT_FILTER_BACKENDS': [
@@ -197,3 +199,18 @@ REST_FRAMEWORK = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'ecoshop/media')
+
+# Celery Configuration Options
+CELERY_TIMEZONE = "Europe/Minsk"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+LOGIN_URL = '/admin/login/'
