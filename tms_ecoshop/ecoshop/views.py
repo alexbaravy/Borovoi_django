@@ -17,6 +17,7 @@ from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from .tasks import generate_photo
 from django.contrib.auth.decorators import login_required, permission_required
+import time
 
 
 def breadcrumb(title):
@@ -85,6 +86,7 @@ def add_product(request):
             price = request.POST['price']
             amount = request.POST['amount']
             category = Category.objects.get(pk=request.POST['category'])
+
             if 'photo' in request.FILES:
                 photo = request.FILES['photo']
                 product = Product(name=name,
@@ -96,9 +98,14 @@ def add_product(request):
 
                 product.save()
             else:
-                generate_photo.delay(name=name, description=description, price=price, amount=amount,
+                # generate_photo.delay(name=name, description=description, price=price, amount=amount,
+                #                      category_id=category.id)
+
+                # without celery
+                generate_photo(name=name, description=description, price=price, amount=amount,
                                      category_id=category.id)
 
+            time.sleep(30)
             messages.success(request, 'Product added successfully')
             cache_keys = ['categories_page', 'vendors_page', 'products_page_all',
                           f'products_page_{request.POST["category"]}']

@@ -129,7 +129,11 @@ DATABASES = {
         'PASSWORD': 'ecoshop',
         'HOST': 'localhost',
         'PORT': '5432',
+        "TEST": {
+            "NAME": "ecoshop_test",
+        },
     }
+
 }
 
 # Password validation

@@ -118,3 +118,10 @@ class CustomerReview(Review):
 
     def __str__(self):
         return self.title
+
+
+class Queue(models.Model):
+    item = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.item

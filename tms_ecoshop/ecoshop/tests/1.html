@@ -1,0 +1,83 @@
+<!-- Form Add Product Section Begin -->\n
+<div class="contact-form spad">\n \n
+    <div class
+                 ="col-lg-12 text-center" style="padding-bottom: 50px">\n \n
+        <div class="site-btn">Product added successfully</div>
+        \n \n
+    </div>
+    \n \n
+    <div class="container">\n
+        <div class="row">\n
+            <d
+                    iv class="col-lg-12">\n
+                <div class="contact__form__title">\n <h2>Add Product</h2>\n</div>
+                \n
+        </div>
+        \n
+    </div>
+    \n\n        <!--        <form method="post" action="/
+ecoshop/add-product/">-->\n
+    <!--            <input type="hidden" name="csrfmiddlewaretoken" value="rweNqcSp0DOvb15FfLc4RayDZQvECLid2uP1hsSt0GNVpLE7UzKh8xOgji6V34X7">-->
+    \n        <!--            <div class="row">-->\n
+    <!--                <div class="col-lg-12">-->\n        <!--                                        <p>\n    <label for="id_name">Name:</label>\n    <input type="text" name="name" placeholder="Enter name" maxlength="100" requ
+ired id="id_name">\n    \n    \n  </p>\n\n  \n  <p>\n    <label for="id_description">Description:</label>\n    <textarea name="description" cols="40" rows="10" placeholder="Enter description" required id="id_description">\n</tex
+tarea>\n    \n    \n  </p>\n\n  \n  <p>\n    <label for="id_photo">Photo:</label>\n    <input type="file" name="photo" accept="image/*" id="id_photo">\n    \n    \n  </p>\n\n  \n  <p>\n    <label for="id_price">Price:</label>\n
+   <input type="text" name="price" placeholder="Enter price" required id="id_price">\n    \n    \n  </p>\n\n  \n  <p>\n    <label for="id_amount">Amount:</label>\n    <input type="text" name="amount" placeholder="Enter amount" r
+equired id="id_amount">\n    \n    \n  </p>\n\n  \n  <p>\n    <label for="id_category">Category:</label>\n    <select name="category" placeholder="Select product category" required id="id_category">\n  <option value="" selected>
+---------</option>\n\n  <option value="48">Test Category</option>\n\n</select>\n    \n    \n      \n    \n  </p>-->\n
+    <!--                </div>-->\n        <!--            </div>-->\n\n        <!--            <div class=
+"col-lg-12 text-center" style="margin-top:80px">-->\n
+    <!--                                <button type="submit" class="site-btn">Add Product</button>-->\n
+    <!--            </div>-->\n\n        <!--        </form>-->
+    \n\n
+    <form method="post" enctype="multipart/form-data" action="/ecoshop/add-product/">\n
+        <div class="row">\n
+            <div class="col-lg-12">\n <input type="hidden" name="csrfmiddleware
+token" value="rweNqcSp0DOvb15FfLc4RayDZQvECLid2uP1hsSt0GNVpLE7UzKh8xOgji6V34X7">\n \n\n
+                <form method="post" enctype="multipart/form-data"><input type="hidden" name="csrfmiddlewaretoken"
+                                                                         value="rweNqcSp0DOvb1
+5FfLc4RayDZQvECLid2uP1hsSt0GNVpLE7UzKh8xOgji6V34X7">
+                    <div id="div_id_name" class="mb-3"><label for="id_name" class="form-label requiredField">\n
+                        Name<span class="asteriskField">*</span> </label> <input type="text" name="name" placeholder="Enter name" maxlength="100" class="textinput form-control" required id="id_name"></div>
+                    <div id="div_id_description" class="mb-3"><label for="id_description"
+                                                                     class="form-label requiredField">\n
+                        Description<span class="asteriskField">*</span> </label> <textarea name="description" cols="40"
+                                                                                           rows="10"
+                                                                                           placeholder="Enter description"
+                                                                                           class="textarea form-control"
+                                                                                           required id="id_description">\n</textarea>
+                    </div>
+                    <div id="div_id_photo" class="mb-3"><label for="id_photo" class="form-label requiredField">\n
+                        Photo<span class="asteriskField">*</span> </label>
+                        <div><input type="file" name="photo" class="form-control" accept="
+image/*" id="id_photo"></div>
+                    </div>
+                    <div id="div_id_price" class="mb-3"><label for="id_price" class="form-label requiredField">\n
+                        Price<span class="asteriskField">*</span> </label> <input type="text" name="price" placeholder="Enter price" class="textinput form-control" required id="id_price"></div>
+                    <div id="div_id_amount" class="mb-3"><label for="id_amount" class="form-label requiredField">\n
+                        Amount<span class="asteriskField">*</span> </label> <input type="text" name="amount" placeholder="Enter amount" class="textinput form-control"
+                                  required id="id_amount"></div>
+                    <div id="div_id_category" class="mb-3"><label for="id_category" class="form-l
+abel requiredField">\n Category<span class="asteriskField">*</span> </label> <select name="category"
+                                                                                     placeholder="Select product category"
+                                                                                     class="select form-select" required
+                                                                                     id="id_category">
+                        <option value="" selected>---------
+                        </option>
+                        <option value="48">Test Category</option>
+                        \n\n</select></div>
+                </form>
+                \n\n
+            </div>
+            \n
+            <div class="col-lg-12 text-center" style="margin-top:80px">\n
+                <button type="submit" class="site-btn">Add Product
+                </button>
+                \n
+            </div>
+            \n
+        </div>
+        \n
+    </form>
+    \n
+</div>\n</div>

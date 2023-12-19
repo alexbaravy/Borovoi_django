@@ -30,14 +30,16 @@ def generate_photo(name, description, price, amount, category_id):
         photo = ContentFile(data, name='hello.png')
         Product.objects.create(name=name, description=description, photo=photo, price=price, amount=amount,
                                category=category)
+
+        return f"{Product}"
     except requests.RequestException as e:
-        print(f"Request failed: {e}")
+        return f"Request failed: {e}"
     except json.JSONDecodeError as e:
-        print(f"JSON decoding failed: {e}")
+        return f"JSON decoding failed: {e}"
     except KeyError as e:
-        print(f"KeyError: {e}")
+        return f"KeyError: {e}"
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        return f"An unexpected error occurred: {e}"
 
 # @shared_task()
 # def send_feedback_email_task(email_address, message):
